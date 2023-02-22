@@ -29,7 +29,7 @@ def annotate_frames(path):
         cv2.imwrite(annotated_frame_path + 'annotated_frame%d.jpg' % i, frame_with_key_points)
         file = open(landmark_path + 'frame%d_landmarks.txt' % i, 'w+')
         for point in key_points:
-            file.write(str(point.pt[0]) + ' ' + str(point.pt[1]))
+            file.write(str(point.pt[0]) + ' ' + str(point.pt[1]) + '\n')
         file.close()
         i += 1
 
@@ -96,9 +96,9 @@ def preprocess(image):
 def detect_markers(frame, params=None):
     params = cv2.SimpleBlobDetector_Params()
 
-    # params.minThreshold = 230
+    params.minThreshold = 20
     # params.maxThreshold = 255
-    #
+
     # Filter by Area.
     params.filterByArea = True
     params.minArea = 50
@@ -129,9 +129,8 @@ def refine_markers(key_points):
 
 if __name__ == '__main__':
 
-    data_path_arg = str(sys.argv[1])
-    if data_path_arg == '':
-        data_path = 'Data/Participant01/autocorrection/take1'
+    if len(sys.argv) > 1:
+        data_path = str(sys.argv[1])
     else:
-        data_path = data_path_arg
+        data_path = 'Data/Participant01/autocorrection/take1'
     annotate_frames(data_path)
